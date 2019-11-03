@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaUI", "CapaUI\CapaUI.csproj", "{37FA0F2E-F06D-4FE8-BB49-A8314C535279}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaConsola", "CapaConsola\CapaConsola.csproj", "{A090F805-D3BC-4ED7-8BD0-5EF1C365555F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaDominio", "CapaDominio\CapaDominio.csproj", "{7B4C06AF-E9D7-4211-B306-DAA726697C79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37FA0F2E-F06D-4FE8-BB49-A8314C535279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37FA0F2E-F06D-4FE8-BB49-A8314C535279}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37FA0F2E-F06D-4FE8-BB49-A8314C535279}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37FA0F2E-F06D-4FE8-BB49-A8314C535279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A090F805-D3BC-4ED7-8BD0-5EF1C365555F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A090F805-D3BC-4ED7-8BD0-5EF1C365555F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A090F805-D3BC-4ED7-8BD0-5EF1C365555F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A090F805-D3BC-4ED7-8BD0-5EF1C365555F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B4C06AF-E9D7-4211-B306-DAA726697C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B4C06AF-E9D7-4211-B306-DAA726697C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B4C06AF-E9D7-4211-B306-DAA726697C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B4C06AF-E9D7-4211-B306-DAA726697C79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4437844-038F-496F-B34A-2D2FECADD356}
+	EndGlobalSection
+EndGlobal
