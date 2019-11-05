@@ -103,5 +103,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CapaDominio\CapaDominio.csproj">
+      <Project>{7B4C06AF-E9D7-4211-B306-DAA726697C79}</Project>
+      <Name>CapaDominio</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
