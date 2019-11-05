@@ -7,6 +7,19 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Button x:Name="BtnLimpiar" Content="Limpiar" HorizontalAlignment="Left" Margin="42,171,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="BtnEntrenar" Content="Entrenar" HorizontalAlignment="Left" Margin="241,171,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="BtnSimular" Content="Simular" HorizontalAlignment="Left" Margin="229,225,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="BtnExaminar" Content="Examinar" HorizontalAlignment="Left" Margin="146,171,0,0" VerticalAlignment="Top" Width="75"/>
+        <ListBox x:Name="lbTablaSolucion" HorizontalAlignment="Left" Height="175" Margin="488,222,0,0" VerticalAlignment="Top" Width="283"/>
+        <ListBox x:Name="lbTablaProblema" HorizontalAlignment="Left" Height="147" Margin="488,59,0,0" VerticalAlignment="Top" Width="283"/>
+        <Label Content="N° iteraciones: " HorizontalAlignment="Left" Margin="32,59,0,0" VerticalAlignment="Top"/>
+        <Label Content="Archivo:" HorizontalAlignment="Left" Margin="32,99,0,0" VerticalAlignment="Top"/>
+        <Label Content="patron:" HorizontalAlignment="Left" Margin="36,219,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TxtIteracion" HorizontalAlignment="Left" Height="23" Margin="136,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="TxtArchivo" HorizontalAlignment="Left" Height="23" Margin="136,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="TxtPatron" HorizontalAlignment="Left" Height="23" Margin="91,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Red Neuronal BackPropagation" HorizontalAlignment="Left" Margin="256,19,0,0" VerticalAlignment="Top" FontFamily="Rockwell Extra Bold" FontSize="14"/>
+
     </Grid>
 </Window>
