@@ -7,8 +7,8 @@ namespace CapaConsola
     {
         static void Main(string[] args)
         {
-            Entrenamiento(3, "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/problema.csv");
-            Simulacion("1;0");
+            Entrenamiento(3, "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/problema.csv",0.1,0.001);
+            //Simulacion("1;0");
         }
 
         private static void Normalizar(string direccionArchivo)
@@ -16,7 +16,7 @@ namespace CapaConsola
 
         }
 
-        private static void Entrenamiento(int iteraciones, string direccionArchivo)
+        private static void Entrenamiento(int iteraciones, string direccionArchivo, double rata, double errorMax)
         {
             int numEntradas = 0, numSalidas = 0;
             string direccion = direccionArchivo;
@@ -47,8 +47,8 @@ namespace CapaConsola
             sr.Close();
 
 
-            int num = 1, neuronasCapaOculta1 = 6, neuronasCapaOculta2 = 5; double emp = 0.001, erms;
-            double rataAprendizaje = 1;
+            int num = 1, neuronasCapaOculta1 = 6, neuronasCapaOculta2 = 5; double emp = errorMax, erms;
+            double rataAprendizaje = rata;
 
             double[] vectorUmbralUno = new double[neuronasCapaOculta1];
             double[] vectorUmbralDos = new double[neuronasCapaOculta2];
@@ -246,7 +246,7 @@ namespace CapaConsola
                     {
                         for (int j = 0; j < neuronasCapaOculta2; j++)
                         {
-                            funcionSoma3 = (SalidaRed2[j] * matrizPesoTres[q, j]) + funcionSoma3;
+                            funcionSoma3 = (SalidaRed2[j] * matrizPesoTres[j,q]) + funcionSoma3;
                         }
 
                         double calcularSalida = (Math.Truncate((funcionSoma3 - vectorUmbralTres[q]) * 10000) / 10000);
@@ -272,9 +272,9 @@ namespace CapaConsola
                     {
                         for (int w = 0; w < numSalidas; w++)
                         {
-                            nolineal = (Math.Truncate(erroresLineales[l] * matrizPesoTres[w, l] + nolineal) / 10000);
+                            nolineal = (erroresLineales[w] * matrizPesoTres[l,w] + nolineal);
                         }
-                        erroresNoLinealesDos[l] = nolineal;
+                        erroresNoLinealesDos[l] = Math.Truncate(nolineal * 10000) / 10000;
                         Console.WriteLine("error no lineal " + l + ": " + erroresNoLinealesDos[l]);
                     }
 
@@ -284,9 +284,9 @@ namespace CapaConsola
                     {
                         for (int w = 0; w < neuronasCapaOculta2; w++)
                         {
-                            nolineal = (Math.Truncate(erroresNoLinealesDos[l] * matrizPesoDos[w, l] + nolineal) / 10000);
+                            nolineal = erroresNoLinealesDos[w] * matrizPesoDos[l,w] + nolineal;
                         }
-                        erroresNoLinealesUno[l] = nolineal;
+                        erroresNoLinealesUno[l] = Math.Truncate(nolineal * 10000) / 10000;
                         Console.WriteLine("error no lineal " + l + ": " + erroresNoLinealesUno[l]);
                     }
 
@@ -308,7 +308,7 @@ namespace CapaConsola
                     {
                         for (int x = 0; x < neuronasCapaOculta1; x++)
                         {
-                            matrizPesoUno[z, x] = (Math.Truncate((matrizPesoUno[z, x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (Math.Tanh(SalidaRed1[x])) * vectorEntrada[z]) * 10000) / 10000);
+                            matrizPesoUno[z, x] = (Math.Truncate((matrizPesoUno[z, x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (1 / (Math.Cosh(SalidaRed1[x]) * Math.Cosh(SalidaRed1[x]))) * vectorEntrada[z]) * 10000) / 10000);
                             Console.Write(matrizPesoUno[z, x] + " ");
                         }
                         Console.Write("\n");
@@ -318,7 +318,7 @@ namespace CapaConsola
                     Console.WriteLine("nuevo umbral capa 1");
                     for (int x = 0; x < neuronasCapaOculta1; x++)
                     {
-                        vectorUmbralUno[x] = (Math.Truncate((vectorUmbralUno[x] + 2* rataAprendizaje * erroresNoLinealesUno[x] * (Math.Tanh(SalidaRed1[x])) * 1) * 10000) / 10000);
+                        vectorUmbralUno[x] = (Math.Truncate((vectorUmbralUno[x] + 2* rataAprendizaje * erroresNoLinealesUno[x] * (1 / (Math.Cosh(SalidaRed1[x]) * Math.Cosh(SalidaRed1[x]))) * 1) * 10000) / 10000);
                         Console.Write(vectorUmbralUno[x] + " ");
                     }
 
@@ -329,7 +329,7 @@ namespace CapaConsola
                     {
                         for (int x = 0; x < neuronasCapaOculta2; x++)
                         {
-                            matrizPesoDos[z, x] = (Math.Truncate((matrizPesoDos[z, x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (Math.Tanh(SalidaRed2[x])) * SalidaRed1[x]) * 10000) / 10000);
+                            matrizPesoDos[z, x] = (Math.Truncate((matrizPesoDos[z, x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (1 / (Math.Cosh(SalidaRed2[x]) * Math.Cosh(SalidaRed2[x]))) * SalidaRed1[z]) * 10000) / 10000);
                             Console.Write(matrizPesoDos[z, x] + " ");
                         }
                         Console.Write("\n");
@@ -339,7 +339,7 @@ namespace CapaConsola
                     Console.WriteLine("nuevo umbral capa 2");
                     for (int x = 0; x < neuronasCapaOculta2; x++)
                     {
-                        vectorUmbralDos[x] = (Math.Truncate((vectorUmbralDos[x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (Math.Tanh(SalidaRed2[x])) * 1) * 10000) / 10000);
+                        vectorUmbralDos[x] = (Math.Truncate((vectorUmbralDos[x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (1 / (Math.Cosh(SalidaRed2[x]) * Math.Cosh(SalidaRed2[x]))) * 1) * 10000) / 10000);
                         Console.Write(vectorUmbralDos[x] + " ");
                     }
 
@@ -391,7 +391,7 @@ namespace CapaConsola
             {
                 for (int i = 0; i < numEntradas; i++)
                 {
-                    for (int j = 0; j < numSalidas; j++)
+                    for (int j = 0; j < neuronasCapaOculta1; j++)
                     {
                         writer.Write(matrizPesoUno[i, j].ToString() + ";");
                     }
@@ -410,9 +410,9 @@ namespace CapaConsola
             //capa 2
             using (StreamWriter writer = new StreamWriter("C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/pesosEntrenamientoDos.txt", false))
             {
-                for (int i = 0; i < numEntradas; i++)
+                for (int i = 0; i < neuronasCapaOculta1; i++)
                 {
-                    for (int j = 0; j < numSalidas; j++)
+                    for (int j = 0; j < neuronasCapaOculta2; j++)
                     {
                         writer.Write(matrizPesoDos[i, j].ToString() + ";");
                     }
@@ -431,7 +431,7 @@ namespace CapaConsola
             //capa salida
             using (StreamWriter writer = new StreamWriter("C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/pesosEntrenamientoSalida.txt", false))
             {
-                for (int i = 0; i < numEntradas; i++)
+                for (int i = 0; i < neuronasCapaOculta2; i++)
                 {
                     for (int j = 0; j < numSalidas; j++)
                     {

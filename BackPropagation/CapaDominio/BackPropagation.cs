@@ -35,10 +35,10 @@ namespace CapaDominio
         }
 
         public void Entrenamiento(int iteraciones, int numEntradas, int numSalidas,
-            int Patrones, string direccion)
+            int Patrones, string direccion, double rata, double errorMax)
         {
-            int num = 1; double emp = 0.0001; double erms;
-            double rataAprendizaje = 0.1;
+            int num = 1; double emp = errorMax; double erms;
+            double rataAprendizaje = rata;
             int neuronasCapaOculta1 = 6, neuronasCapaOculta2 = 5;
 
             double[] vectorUmbralUno = new double[neuronasCapaOculta1];
@@ -198,9 +198,9 @@ namespace CapaDominio
                     {
                         for (int w = 0; w < numSalidas; w++)
                         {
-                            nolineal = (Math.Truncate(erroresLineales[w] * matrizPesoTres[l, w] + nolineal) / 10000);
+                            nolineal = erroresLineales[w] * matrizPesoTres[l, w] + nolineal;
                         }
-                        erroresNoLinealesDos[l] = nolineal;
+                        erroresNoLinealesDos[l] = Math.Truncate(nolineal * 10000) / 10000;
                     }
 
                     //capa 1
@@ -208,9 +208,9 @@ namespace CapaDominio
                     {
                         for (int w = 0; w < neuronasCapaOculta2; w++)
                         {
-                            nolineal = (Math.Truncate(erroresNoLinealesDos[w] * matrizPesoDos[l, w] + nolineal) / 10000);
+                            nolineal = erroresNoLinealesDos[w] * matrizPesoDos[l, w] + nolineal;
                         }
-                        erroresNoLinealesUno[l] = nolineal;
+                        erroresNoLinealesUno[l] = Math.Truncate(nolineal * 10000) / 10000;
                     }
 
                     //calcular el error del patron
@@ -222,19 +222,19 @@ namespace CapaDominio
 
                     errorPatron[i] = (Math.Truncate((sumaErrores / numSalidas) * 10000) / 10000);
 
-                    //modificar pesos    
+                    //modificar pesos    algoritmo de entrenamiento
                     for (int z = 0; z < numEntradas; z++)
                     {
                         for (int x = 0; x < neuronasCapaOculta1; x++)
                         {
-                            matrizPesoUno[z, x] = (Math.Truncate((matrizPesoUno[z, x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (Math.Tanh(SalidaRed1[x])) * vectorEntrada[z]) * 10000) / 10000);
+                            matrizPesoUno[z, x] = (Math.Truncate((matrizPesoUno[z, x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (1 / (Math.Cosh(SalidaRed1[x]) * Math.Cosh(SalidaRed1[x]))) * vectorEntrada[z]) * 10000) / 10000);
                             
                         }
                     }
 
                     for (int x = 0; x < neuronasCapaOculta1; x++)
                     {
-                        vectorUmbralUno[x] = (Math.Truncate((vectorUmbralUno[x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (Math.Tanh(SalidaRed1[x])) * 1) * 10000) / 10000);
+                        vectorUmbralUno[x] = (Math.Truncate((vectorUmbralUno[x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (1 / (Math.Cosh(SalidaRed1[x]) * Math.Cosh(SalidaRed1[x]))) * 1) * 10000) / 10000);
                         
                     }
 
@@ -242,14 +242,14 @@ namespace CapaDominio
                     {
                         for (int x = 0; x < neuronasCapaOculta2; x++)
                         {
-                            matrizPesoDos[z, x] = (Math.Truncate((matrizPesoDos[z, x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (Math.Tanh(SalidaRed2[x])) * SalidaRed1[x]) * 10000) / 10000);
+                            matrizPesoDos[z, x] = (Math.Truncate((matrizPesoDos[z, x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (1 / (Math.Cosh(SalidaRed2[x]) * Math.Cosh(SalidaRed2[x]))) * SalidaRed1[z]) * 10000) / 10000);
                             
                         }
                     }
 
                     for (int x = 0; x < neuronasCapaOculta2; x++)
                     {
-                        vectorUmbralDos[x] = (Math.Truncate((vectorUmbralDos[x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (Math.Tanh(SalidaRed2[x])) * 1) * 10000) / 10000);
+                        vectorUmbralDos[x] = (Math.Truncate((vectorUmbralDos[x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (1 / (Math.Cosh(SalidaRed2[x]) * Math.Cosh(SalidaRed2[x]))) * 1) * 10000) / 10000);
                         
                     }
 

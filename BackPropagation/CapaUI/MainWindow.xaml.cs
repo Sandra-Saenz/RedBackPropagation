@@ -146,9 +146,11 @@ namespace CapaUI
             int numeroEntradas = entrada;
             int numeroSalidas = salida;
             int numeroPatrones = numeroFilas - 1;
+            double rata = Convert.ToDouble(TxtRata.Text);
+            double errorMax = Convert.ToDouble(TxtErrorMax.Text);
 
             //llamar al metodo normalizar y enviarle la direccion y colocar el return en la sgte funcion
-            backPropagation.Entrenamiento(numeroIteraciones, numeroEntradas, numeroSalidas, numeroPatrones, direccion);
+            backPropagation.Entrenamiento(numeroIteraciones, numeroEntradas, numeroSalidas, numeroPatrones, direccion, rata, errorMax);
         }
 
         private void Grafica()
@@ -160,6 +162,7 @@ namespace CapaUI
         {
             TxtIteracion.Text = "";
             TxtArchivo.Text = "";
+            TxtRata.Text = "";
             lbTablaSolucion.Items.Clear();
             lbTablaProblema.Items.Clear();
         }
