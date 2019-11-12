@@ -23,10 +23,10 @@ namespace CapaDominio
                 numeroAletorio[1] = random.NextDouble() * signo[random.Next(0, 2)];
                 resultado = numeroAletorio[random.Next(0, 3)];
             }
-            return (Math.Truncate(resultado * 10000) / 10000);
+            return Math.Round(resultado, 4);
         }
 
-        private static string Normalizar(string direccionArchivo)
+        public string Normalizar(string direccionArchivo)
         {
             // normalizar el archivo de datos categoricos a numericos, desde el UI se llamara esta funcion primero
             // y se le dara una direccion con el archivo se hace todo y envia otra direccion con un nuevo archivo normalizado
@@ -149,7 +149,7 @@ namespace CapaDominio
                             funcionSoma = (vectorEntrada[j] * matrizPesoUno[j, q]) + funcionSoma;
                         }
 
-                        double calcularSalida = (Math.Truncate((funcionSoma - vectorUmbralUno[q]) * 10000) / 10000);
+                        double calcularSalida = (funcionSoma - vectorUmbralUno[q]);
 
                         double h = Math.Tanh(calcularSalida);
                         SalidaRed1[q] = h;
@@ -164,7 +164,7 @@ namespace CapaDominio
                             funcionSoma2 = (SalidaRed1[j] * matrizPesoDos[j, q]) + funcionSoma2;
                         }
 
-                        double calcularSalida = (Math.Truncate((funcionSoma2 - vectorUmbralDos[q]) * 10000) / 10000);
+                        double calcularSalida = (funcionSoma2 - vectorUmbralDos[q]);
 
                         double h = Math.Tanh(calcularSalida);
                         SalidaRed2[q] = h;
@@ -179,7 +179,7 @@ namespace CapaDominio
                             funcionSoma3 = (SalidaRed2[j] * matrizPesoTres[j, q]) + funcionSoma3;
                         }
 
-                        double calcularSalida = (Math.Truncate((funcionSoma3 - vectorUmbralTres[q]) * 10000) / 10000);
+                        double calcularSalida = (funcionSoma3 - vectorUmbralTres[q]);
 
                         double h = Math.Tanh(calcularSalida);
                         SalidaRed3[q] = h;
@@ -188,7 +188,7 @@ namespace CapaDominio
                     //calcular los errores lineales producidos a la salida
                     for (int ii = 0; ii < numSalidas; ii++)
                     {
-                        erroresLineales[ii] = (Math.Truncate((vectorSalida[ii] - SalidaRed3[ii]) * 10000) / 10000);
+                        erroresLineales[ii] = vectorSalida[ii] - SalidaRed3[ii];
                     }
 
                     //calcular los errores no lineales de cada capa
@@ -200,7 +200,7 @@ namespace CapaDominio
                         {
                             nolineal = erroresLineales[w] * matrizPesoTres[l, w] + nolineal;
                         }
-                        erroresNoLinealesDos[l] = Math.Truncate(nolineal * 10000) / 10000;
+                        erroresNoLinealesDos[l] = nolineal;
                     }
 
                     //capa 1
@@ -210,7 +210,7 @@ namespace CapaDominio
                         {
                             nolineal = erroresNoLinealesDos[w] * matrizPesoDos[l, w] + nolineal;
                         }
-                        erroresNoLinealesUno[l] = Math.Truncate(nolineal * 10000) / 10000;
+                        erroresNoLinealesUno[l] =  nolineal;
                     }
 
                     //calcular el error del patron
@@ -220,21 +220,21 @@ namespace CapaDominio
                         sumaErrores = erroresLineales[a] + sumaErrores;
                     }
 
-                    errorPatron[i] = (Math.Truncate((sumaErrores / numSalidas) * 10000) / 10000);
+                    errorPatron[i] = sumaErrores / numSalidas;
 
                     //modificar pesos    algoritmo de entrenamiento
                     for (int z = 0; z < numEntradas; z++)
                     {
                         for (int x = 0; x < neuronasCapaOculta1; x++)
                         {
-                            matrizPesoUno[z, x] = (Math.Truncate((matrizPesoUno[z, x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (1 / (Math.Cosh(SalidaRed1[x]) * Math.Cosh(SalidaRed1[x]))) * vectorEntrada[z]) * 10000) / 10000);
+                            matrizPesoUno[z, x] = (matrizPesoUno[z, x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (1 / (Math.Cosh(SalidaRed1[x]) * Math.Cosh(SalidaRed1[x]))) * vectorEntrada[z]);
                             
                         }
                     }
 
                     for (int x = 0; x < neuronasCapaOculta1; x++)
                     {
-                        vectorUmbralUno[x] = (Math.Truncate((vectorUmbralUno[x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (1 / (Math.Cosh(SalidaRed1[x]) * Math.Cosh(SalidaRed1[x]))) * 1) * 10000) / 10000);
+                        vectorUmbralUno[x] = (vectorUmbralUno[x] + 2 * rataAprendizaje * erroresNoLinealesUno[x] * (1 / (Math.Cosh(SalidaRed1[x]) * Math.Cosh(SalidaRed1[x]))) * 1);
                         
                     }
 
@@ -242,14 +242,14 @@ namespace CapaDominio
                     {
                         for (int x = 0; x < neuronasCapaOculta2; x++)
                         {
-                            matrizPesoDos[z, x] = (Math.Truncate((matrizPesoDos[z, x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (1 / (Math.Cosh(SalidaRed2[x]) * Math.Cosh(SalidaRed2[x]))) * SalidaRed1[z]) * 10000) / 10000);
+                            matrizPesoDos[z, x] = (matrizPesoDos[z, x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (1 / (Math.Cosh(SalidaRed2[x]) * Math.Cosh(SalidaRed2[x]))) * SalidaRed1[z]);
                             
                         }
                     }
 
                     for (int x = 0; x < neuronasCapaOculta2; x++)
                     {
-                        vectorUmbralDos[x] = (Math.Truncate((vectorUmbralDos[x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (1 / (Math.Cosh(SalidaRed2[x]) * Math.Cosh(SalidaRed2[x]))) * 1) * 10000) / 10000);
+                        vectorUmbralDos[x] = (vectorUmbralDos[x] + 2 * rataAprendizaje * erroresNoLinealesDos[x] * (1 / (Math.Cosh(SalidaRed2[x]) * Math.Cosh(SalidaRed2[x]))) * 1);
                         
                     }
 
@@ -257,14 +257,14 @@ namespace CapaDominio
                     {
                         for (int x = 0; x < numSalidas; x++)
                         {
-                            matrizPesoTres[z, x] = (Math.Truncate((matrizPesoTres[z, x] + 2 * rataAprendizaje * erroresLineales[x] * SalidaRed2[z]) * 10000) / 10000);
+                            matrizPesoTres[z, x] = (matrizPesoTres[z, x] + 2 * rataAprendizaje * erroresLineales[x] * SalidaRed2[z]);
                             
                         }
                     }
 
                     for (int x = 0; x < numSalidas; x++)
                     {
-                        vectorUmbralTres[x] = (Math.Truncate((vectorUmbralTres[x] + 2 * rataAprendizaje * erroresLineales[x] * 1) * 10000) / 10000);
+                        vectorUmbralTres[x] = (vectorUmbralTres[x] + 2 * rataAprendizaje * erroresLineales[x] * 1);
                         
                     }
                 }
@@ -276,7 +276,7 @@ namespace CapaDominio
                     sumaErrorPatron = Math.Abs(errorPatron[l] + sumaErrorPatron);
                 }
 
-                erms = (Math.Truncate((sumaErrorPatron / Patrones) * 10000) / 10000);
+                erms = (sumaErrorPatron / Patrones);
 
                 if (erms <= emp)
                 {
@@ -292,7 +292,7 @@ namespace CapaDominio
                 {
                     for (int j = 0; j < neuronasCapaOculta1; j++)
                     {
-                        writer.Write(matrizPesoUno[i, j].ToString() + ";");
+                        writer.Write(Math.Round(matrizPesoUno[i, j], 4).ToString() + ";");
                     }
                     writer.Write("\n");
                 }
@@ -302,7 +302,7 @@ namespace CapaDominio
             {
                 for (int i = 0; i < vectorUmbralUno.Length; i++)
                 {
-                    writer.Write(vectorUmbralUno[i].ToString() + ";");
+                    writer.Write(Math.Round(vectorUmbralUno[i], 4).ToString() + ";");
                 }
             }
 
@@ -313,7 +313,7 @@ namespace CapaDominio
                 {
                     for (int j = 0; j < neuronasCapaOculta2; j++)
                     {
-                        writer.Write(matrizPesoDos[i, j].ToString() + ";");
+                        writer.Write(Math.Round(matrizPesoDos[i, j], 4).ToString() + ";");
                     }
                     writer.Write("\n");
                 }
@@ -323,7 +323,7 @@ namespace CapaDominio
             {
                 for (int i = 0; i < vectorUmbralDos.Length; i++)
                 {
-                    writer.Write(vectorUmbralDos[i].ToString() + ";");
+                    writer.Write(Math.Round(vectorUmbralDos[i], 4).ToString() + ";");
                 }
             }
 
@@ -334,24 +334,199 @@ namespace CapaDominio
                 {
                     for (int j = 0; j < numSalidas; j++)
                     {
-                        writer.Write(matrizPesoTres[i, j].ToString() + ";");
+                        writer.Write(Math.Round(matrizPesoTres[i, j], 4).ToString() + ";");
                     }
                     writer.Write("\n");
                 }
             }
-
+            
             using (StreamWriter writer = new StreamWriter("C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/umbralesEntrenamientoSalida.txt", false))
             {
                 for (int i = 0; i < vectorUmbralTres.Length; i++)
                 {
-                    writer.Write(vectorUmbralTres[i].ToString() + ";");
+                    writer.Write(Math.Round(vectorUmbralTres[i], 4).ToString() + ";");
                 }
             }
         }
 
-        private static void Simulacion(string patron)
+        public string Simulacion(string patron)
         {
+            string dirPesos1 = "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/pesosEntrenamientoUno.txt";
+            string dirUmbrales1 = "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/umbralesEntrenamientoUno.txt";
+            string dirPesos2 = "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/pesosEntrenamientoDos.txt";
+            string dirUmbrales2 = "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/umbralesEntrenamientoDos.txt";
+            string dirPesos3 = "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/pesosEntrenamientoSalida.txt";
+            string dirUmbrales3 = "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/umbralesEntrenamientoSalida.txt";
+            string direccion = "C:/Users/55YV/Downloads/redes/ArchivosBackPropagation/problema.csv";
 
+            int numEntradas = 0, numSalidas = 0;
+
+            StreamReader sr = new StreamReader(direccion);
+            for (int f = 0; f < 1; f++)
+            {
+                string linea = sr.ReadLine();
+                for (int c = 0; c < linea.Length; c++)
+                {
+                    if (Convert.ToString(linea[c]) == "x" || Convert.ToString(linea[c]) == "X")
+                    {
+                        numEntradas++;
+                    }
+                    else if (Convert.ToString(linea[c]) == "y" || Convert.ToString(linea[c]) == "Y")
+                    {
+                        numSalidas++;
+                    }
+                }
+            }
+            sr.Close();
+
+            int neuronasCapaOculta1 = 6, neuronasCapaOculta2 = 5;
+
+            double[] vectorUmbralUno = new double[neuronasCapaOculta1];
+            double[] vectorUmbralDos = new double[neuronasCapaOculta2];
+            double[] vectorUmbralTres = new double[numSalidas];
+
+            double[,] matrizPesoUno = new double[numEntradas, neuronasCapaOculta1];
+            double[,] matrizPesoDos = new double[neuronasCapaOculta1, neuronasCapaOculta2];
+            double[,] matrizPesoTres = new double[neuronasCapaOculta2, numSalidas];
+
+            double[] SalidaRed1 = new double[neuronasCapaOculta1];
+            double[] SalidaRed2 = new double[neuronasCapaOculta2];
+            double[] SalidaRed3 = new double[numSalidas];
+
+
+            //guardar pesos y umbrales 
+            // 1
+            int fila1 = File.ReadAllLines(dirPesos1).Length;
+            StreamReader sreader = new StreamReader(dirPesos1);
+            for (int f = 0; f < fila1; f++)
+            {
+                string linea = sreader.ReadLine();
+                string[] numero = linea.Split(';');
+                for (int c = 0; c < numero.Length - 1; c++)
+                {
+                    matrizPesoUno[f, c] = Convert.ToDouble(numero[c]);
+                }
+            }
+            sreader.Close();
+
+            StreamReader reader = new StreamReader(dirUmbrales1);
+            string lineas = reader.ReadLine();
+            string[] numeros = lineas.Split(';');
+            for (int f = 0; f < numeros.Length - 1; f++)
+            {
+                vectorUmbralUno[f] = Convert.ToDouble(numeros[f]);
+            }
+            sreader.Close();
+            // 2
+            int fila2 = File.ReadAllLines(dirPesos2).Length;
+            sreader = new StreamReader(dirPesos2);
+            for (int f = 0; f < fila2; f++)
+            {
+                string linea = sreader.ReadLine();
+                string[] numero = linea.Split(';');
+                for (int c = 0; c < numero.Length - 1; c++)
+                {
+                    matrizPesoDos[f, c] = Convert.ToDouble(numero[c]);
+                }
+            }
+            sreader.Close();
+
+            reader = new StreamReader(dirUmbrales2);
+             lineas = reader.ReadLine();
+            string[] numeros2 = lineas.Split(';');
+            for (int f = 0; f < numeros2.Length - 1; f++)
+            {
+                vectorUmbralDos[f] = Convert.ToDouble(numeros2[f]);
+            }
+            sreader.Close();
+            // 3
+            int fila3 = File.ReadAllLines(dirPesos3).Length;
+            sreader = new StreamReader(dirPesos3);
+            for (int f = 0; f < fila3; f++)
+            {
+                string linea = sreader.ReadLine();
+                string[] numero = linea.Split(';');
+                for (int c = 0; c < numero.Length - 1; c++)
+                {
+                    matrizPesoTres[f, c] = Convert.ToDouble(numero[c]);
+                }
+            }
+            sreader.Close();
+
+            reader = new StreamReader(dirUmbrales3);
+            lineas = reader.ReadLine();
+            string[] numeros3 = lineas.Split(';');
+            for (int f = 0; f < numeros3.Length - 1; f++)
+            {
+                vectorUmbralTres[f] = Convert.ToDouble(numeros3[f]);
+            }
+            sreader.Close();
+
+            //presentar el patron de entrada 
+            double calcularSalida;
+            string[] numeroPatron = patron.Split(';');
+            double[] patronSimulado = new double[numEntradas];
+
+            for (int w = 0; w < numEntradas; w++)
+            {
+                patronSimulado[w] = Convert.ToDouble(numeroPatron[w]);
+                Console.WriteLine(patronSimulado[w]);
+            }
+
+            //calcular las salidas de la red 
+            //capa 1
+            double funcionSoma = 0;
+            for (int q = 0; q < neuronasCapaOculta1; q++)
+            {
+                for (int j = 0; j < numEntradas; j++)
+                {
+                    funcionSoma = (patronSimulado[j] * matrizPesoUno[j, q]) + funcionSoma;
+                }
+
+                calcularSalida = (funcionSoma - vectorUmbralUno[q]);
+
+                double h = Math.Tanh(calcularSalida);
+                SalidaRed1[q] = h;
+            }
+
+            //capa 2
+            double funcionSoma2 = 0;
+            for (int q = 0; q < neuronasCapaOculta2; q++)
+            {
+                for (int j = 0; j < neuronasCapaOculta1; j++)
+                {
+                    funcionSoma2 = (SalidaRed1[j] * matrizPesoDos[j, q]) + funcionSoma2;
+                }
+
+                calcularSalida = (funcionSoma2 - vectorUmbralDos[q]);
+
+                double h = Math.Tanh(calcularSalida);
+                SalidaRed2[q] = h;
+            }
+
+            //salida 
+            double funcionSoma3 = 0;
+            for (int q = 0; q < numSalidas; q++)
+            {
+                for (int j = 0; j < neuronasCapaOculta2; j++)
+                {
+                    funcionSoma3 = (SalidaRed2[j] * matrizPesoTres[j, q]) + funcionSoma3;
+                }
+
+                calcularSalida = (funcionSoma3 - vectorUmbralTres[q]);
+
+                double h = Math.Tanh(calcularSalida);
+                SalidaRed3[q] = Math.Round(h,2);
+            }
+
+            string resultado = "";
+            for (int i = 0; i < numSalidas; i++)
+            {
+                resultado = resultado + " " + Convert.ToString(SalidaRed3[i]);
+            }
+
+            return resultado;
         }
+
     }
 }

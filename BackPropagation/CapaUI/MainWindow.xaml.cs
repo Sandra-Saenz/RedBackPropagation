@@ -163,6 +163,7 @@ namespace CapaUI
             TxtIteracion.Text = "";
             TxtArchivo.Text = "";
             TxtRata.Text = "";
+            LbTablaSimulacion.Items.Clear();
             lbTablaSolucion.Items.Clear();
             lbTablaProblema.Items.Clear();
         }
@@ -204,7 +205,20 @@ namespace CapaUI
 
         private void BtnSimular_Click(object sender, RoutedEventArgs e)
         {
+            LbTablaSimulacion.Items.Clear();
+            string patron = TxtPatron.Text;
+            string resultado = backPropagation.Simulacion(patron);
 
+            try
+            {
+                LbTablaSimulacion.Items.Add("TABLA RESULTADO DE LA SIMULACION");
+                LbTablaSimulacion.Items.Add(resultado);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Convert.ToString(ex.Message));
+                return;
+            }
         }
     }
 }
