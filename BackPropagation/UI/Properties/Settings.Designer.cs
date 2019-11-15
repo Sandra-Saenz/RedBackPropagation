@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CapaUI.Properties
+namespace UI.Properties
 {
 
 

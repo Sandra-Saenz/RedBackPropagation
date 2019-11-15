@@ -1,34 +1,29 @@
 ﻿using CapaDominio;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MessageBox = System.Windows.Forms.MessageBox;
 
-namespace CapaUI
+namespace UI
 {
-    /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class Form1 : Form
     {
         BackPropagation backPropagation = new BackPropagation();
 
-        public MainWindow()
+        public Form1()
         {
             InitializeComponent();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
 
         private int ObtenerNIteraciones()
@@ -111,7 +106,7 @@ namespace CapaUI
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(Convert.ToString(ex.Message));
+                MessageBox.Show(Convert.ToString(ex.Message));
                 return;
             }
 
@@ -158,17 +153,19 @@ namespace CapaUI
 
         }
 
-        private void BtnLimpiar_Click(object sender, RoutedEventArgs e)
+        private void BtnLimpiar_Click(object sender, EventArgs e)
         {
             TxtIteracion.Text = "";
             TxtArchivo.Text = "";
             TxtRata.Text = "";
+            TxtErrorMax.Text = "";
+            TxtPatron.Text = "";
             LbTablaSimulacion.Items.Clear();
             lbTablaSolucion.Items.Clear();
             lbTablaProblema.Items.Clear();
         }
 
-        private void BtnExaminar_Click(object sender, RoutedEventArgs e)
+        private void BtnExaminar_Click(object sender, EventArgs e)
         {
             this.lbTablaProblema.Items.Clear();
             OpenFileDialog open = new OpenFileDialog();
@@ -190,12 +187,12 @@ namespace CapaUI
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(Convert.ToString(ex.Message));
+                MessageBox.Show(Convert.ToString(ex.Message));
                 return;
             }
         }
 
-        private void BtnEntrenar_Click(object sender, RoutedEventArgs e)
+        private void BtnEntrenar_Click(object sender, EventArgs e)
         {
             RealizarEntrenamiento();
             Grafica();
@@ -203,7 +200,7 @@ namespace CapaUI
             CargarSolucionEnDGV();
         }
 
-        private void BtnSimular_Click(object sender, RoutedEventArgs e)
+        private void BtnSimular_Click(object sender, EventArgs e)
         {
             LbTablaSimulacion.Items.Clear();
             string patron = TxtPatron.Text;
